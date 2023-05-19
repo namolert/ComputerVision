@@ -7,7 +7,7 @@ import mediapipe as mp
 # Parameters
 width, height = 1280, 720
 gestureThreshold = 300
-folderPath = os.path.join('asset', 'Presentation')
+folderPath = os.path.join('images', 'presentation')
 
 # Camera Setup
 cap = cv2.VideoCapture(0)
@@ -90,9 +90,9 @@ while True:
                 annotationStart = True
                 annotationNumber += 1
                 annotations.append([])
-            print(annotationNumber)
-            print(pointerColor)
-            annotations[annotationNumber].append(indexFinger + pointerColor)
+            # print(annotationNumber)
+            # print(pointerColor)
+            annotations[annotationNumber].append((indexFinger, pointerColor))
             cv2.circle(imgCurrent, indexFinger, 12, pointerColor, cv2.FILLED)
  
         else:
@@ -116,7 +116,8 @@ while True:
     for i, annotation in enumerate(annotations):
         for j in range(len(annotation)):
             if j != 0:
-                cv2.line(imgCurrent, annotation[j - 1][:2], annotation[j][:2], annotation[j][2:5], 12)
+                print(annotation[j - 1][0], annotation[j][0])
+                cv2.line(imgCurrent, annotation[j - 1][0], annotation[j][0], annotation[j][1], 12)
  
     imgSmall = cv2.resize(img, (ws, hs))
     h, w, _ = imgCurrent.shape

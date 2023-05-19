@@ -7,7 +7,7 @@ import mediapipe as mp
 # Parameters
 width, height = 1280, 720
 gestureThreshold = 300
-folderPath = os.path.join('asset', 'Presentation')
+folderPath = os.path.join('images', 'presentation')
 
 # Camera Setup
 cap = cv2.VideoCapture(0)
@@ -36,20 +36,28 @@ pathImages = sorted(os.listdir(folderPath))
 print(pathImages)
  
 def getImageXYFromZ(indexTip, indexMcp):
+    
+
     a, b, c = tuple([indexTip[i] - indexMcp[i] for i in range(len(indexTip))])
     x0, y0, z0 = indexMcp
-    z = 1280
+    z = 1280 # don't have depth map yet
+    # TODO: recheck these formulas
     x = (z - z0) / c * a + x0 if c != 0 else 0
     y = (z - z0) / c * b + y0 if c != 0 else 0
 
     # set overflows to boundaries
     if x < 0:
         x = 0
+    elif x > width - 1:
+        x = width - 1
     if y < 0:
         y = 0
-    
+    elif y > height - 1:
+        y = height - 1
 
-    return int(x), int(y)
+    x = width - 1 - int(x) # flip coordinates
+    y = height - 1 - int(y) # flip coordinates
+    return int(x), int(y) 
 
 while True:
     # Get image frame
@@ -112,9 +120,9 @@ while True:
                 annotationStart = True
                 annotationNumber += 1
                 annotations.append([])
-            print(annotationNumber)
-            print(pointerColor)
-            annotations[annotationNumber].append(indexFinger + pointerColor)
+            # print(annotationNumber)
+            # print(pointerColor)
+            annotations[annotationNumber].append((indexFinger, pointerColor))
             cv2.circle(imgCurrent, indexFinger, 12, pointerColor, cv2.FILLED)
  
         else:
@@ -138,7 +146,8 @@ while True:
     for i, annotation in enumerate(annotations):
         for j in range(len(annotation)):
             if j != 0:
-                cv2.line(imgCurrent, annotation[j - 1][:2], annotation[j][:2], annotation[j][2:5], 12)
+                print(annotation[j - 1][0], annotation[j][0])
+                cv2.line(imgCurrent, annotation[j - 1][0], annotation[j][0], annotation[j][1], 12)
  
     imgSmall = cv2.resize(img, (ws, hs))
     h, w, _ = imgCurrent.shape
