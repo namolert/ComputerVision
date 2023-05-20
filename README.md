@@ -1,4 +1,6 @@
 # project-compvision
+This is an application where you can use hand gestures with the slides. Also, the application is able to blur a background when users needed. <br/> <br/>
+This is a final project in 2110433 Computer Vision (2022/2), Faculty of Engineering, Chulalongkorn University.
 ## Problem statement
 A satisfying presentation requires the composition of proper content, equipment, and speech. However, some users cannot have a good presentation due to the lack of equipment. Therefore, the objective of this project is to create an application that requires only 2 cameras as top-up equipment to let the presenter conduct a decent presentation. This application uses real-time 3D depth estimation using the two cameras to let the presenter control the presentation slides naturally by performing hand gestures without using additional controllers. The presenter can also blur their backgrounds by doing a specified hand gesture.
 
@@ -29,3 +31,8 @@ With all limitations mentioned above, future improvements can be made.
 2. Make the application available online by developing an HTTP application.
 3. Improve the application to support different kinds of resolution, camera, and other parameters. <br/>
 Moreover, additional features such as detecting two hands simultaneously or adding empty pages for free drawing can be implemented.
+
+## Credits
+Big thanks to the creators.
+1. [Nicolai Nielsen](https://www.youtube.com/channel/UCpABUkWm8xMt5XmGcFb3EFg)
+2. [Murtaza's Workshop - Robotics and AI](https://www.youtube.com/channel/UCYUjYU5FveRAscQ8V21w81A)
