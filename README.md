@@ -5,12 +5,15 @@ This is a final project in 2110433 Computer Vision (2022/2), Faculty of Engineer
 A satisfying presentation requires the composition of proper content, equipment, and speech. However, some users cannot have a good presentation due to the lack of equipment. Therefore, the objective of this project is to create an application that requires only 2 cameras as top-up equipment to let the presenter conduct a decent presentation. This application uses real-time 3D depth estimation using the two cameras to let the presenter control the presentation slides naturally by performing hand gestures without using additional controllers.
 
 ## Technical challenge
+The most challenging part of this project is to construct depth images in real-time from the two cameras which are responsible for determining the pointing location on the slides. The cameras need to be calibrated so that both of them can produce 3D maps precisely. Also, being new to computer vision and even 3D vision also makes this project challenging.
 
 ## Related works
 1. [Distant Pointing User Interfaces based on 3D Hand Pointing Recognition](https://dl.acm.org/doi/epdf/10.1145/3132272.3132292) <br/>
 This paper shows a method of finger-pointing recognition based on machine learning which utilizes the appearance difference between two camera images. Moreover, they construct 3 types of user interfaces (tiles layout, pie menu, viewer) to consider the accuracy of distant pointing.
 2. [Hand Gesture Recognition with multiple users for elevator control in covid pandemic situation](https://github.com/pewtpong/CV-Final-Project/tree/main) <br/>
-This project introduces a hand gesture recognition application for controlling an elevator during the pandemic. The project consisted of 3 modules which are hand gesture recognition, face detection, and face recognition. The hand gesture recognition was implemented from Mediapipe, the face detection was implemented from Yolo v4 tiny, and the face recognition was implemented from [ageitgey's face recognition](https://github.com/ageitgey/face_recognition)
+This project introduces a hand gesture recognition application for controlling an elevator during the pandemic. The project consisted of 3 modules which are hand gesture recognition, face detection, and face recognition. The hand gesture recognition was implemented from Mediapipe, the face detection was implemented from Yolo v4 tiny, and the face recognition was implemented from [ageitgey's face recognition](https://github.com/ageitgey/face_recognition).
+3. [Stereo Vision: Depth Estimation between object and camera](https://medium.com/analytics-vidhya/distance-estimation-cf2f2fd709d8) <br/>
+This article shows a tutorial on how to estimate the depth of objects in the video using 2 stereo cameras. Both cameras are needed to be calibrated and then used to calculate disparities. After that, use the disparity to get a depth map/image.
 
 ## Method
 The application consisted of 2 major modules, hand gesture recognition and 3D vision. <br/> <br/>
