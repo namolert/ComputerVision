@@ -33,10 +33,15 @@ counter = 0
 drawMode = False
 imgNumber = 0
 delayCounter = 0
+pointMode = True
 
-annotationsR, annotationsL = [[]], [[]]
-annotationNumberR, annotationNumberL = -1, -1
-annotationStartR, annotationStartL = False, False
+# annotationsR, annotationsL = [[]], [[]]
+# annotationNumberR, annotationNumberL = -1, -1
+# annotationStartR, annotationStartL = False, False
+
+annotations = [[]]
+annotationNumber = -1
+annotationStart = False
 
 hs, ws = int(120 * 1), int(213 * 1)  # width and height of small image
 
@@ -74,18 +79,10 @@ def getImageXYFromZ(indexTip, indexMcp, zdepth):
     return int(x), int(y)
 
 
-num = 0
 while True:
     # Get image frame
     succes_right, frame_right = cap_right.read()
     succes_left, frame_left = cap_left.read()
-
-    if cv2.waitKey(1) & 0xFF == ord("s"):
-        cv2.imwrite('images/stereoRight/imageR_mo' +
-                    str(num) + '.png', frame_right)
-        cv2.imwrite('images/stereoLeft/imageL_mo' +
-                    str(num) + '.png', frame_left)
-        num += 1
 
     # Calibration
     frame_right, frame_left = calibrate_func.undistortRectify(
@@ -100,6 +97,14 @@ while True:
     # Find the hand and its landmarks
     handsR, frame_right = detectorHandR.findHands(frame_right)
     handsL, frame_left = detectorHandL.findHands(frame_left)
+
+    # Display mode
+    if pointMode:
+        cv2.putText(frame_left, "mode: pointing", (50, 400),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 3)
+    else:
+        cv2.putText(frame_left, "mode: annotating", (50, 400),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 3)
 
     # If hand is detected
     if (handsR and handsL) and not buttonPressed:
@@ -180,18 +185,42 @@ while True:
                 annotations = [[]]
                 annotationNumber = -1
                 annotationStart = False
+
+        # Map index finger to the screen
+        depth = tri.find_depth(
+            indexFingerMcpR, indexFingerMcpL, frame_right, frame_left, B, f, alpha)
+        cv2.putText(frame_right, "Distance: " + str(round(depth, 1)),
+                    (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 3)
+        cv2.putText(frame_left, "Distance: " + str(round(depth, 1)),
+                    (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 3)
+        indexFinger = getImageXYFromZ(
+            (indexTipXL, indexTipYL, indexTipZL), (indexMcpXL, indexMcpYL, indexMcpZL), depth)
+
+        # Change pointMode
+        if fingersL == [0, 1, 1, 1, 0] or fingersR == [0, 1, 1, 1, 0]:
+            buttonPressed = True
+            pointMode = not pointMode
+
+        # Choose between point mode and draw mode
+        if pointMode:
+            annotationStart = False
+            cv2.circle(imgCurrent, indexFinger, 12, (0, 255, 0), cv2.FILLED)
         else:
-            depth = tri.find_depth(
-                indexFingerMcpR, indexFingerMcpL, frame_right, frame_left, B, f, alpha)
-            cv2.putText(frame_right, "Distance: " + str(round(depth, 1)),
-                        (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 3)
-            cv2.putText(frame_left, "Distance: " + str(round(depth, 1)),
-                        (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 3)
-            # print("Depth: ", str(round(depth, 1)))
-            indexFinger = getImageXYFromZ(
-                (indexTipXL, indexTipYL, indexTipZL), (indexMcpXL, indexMcpYL, indexMcpZL), depth)
+            if annotationStart is False:
+                annotationStart = True
+                annotationNumber += 1
+                annotations.append([])
+            annotations[annotationNumber].append((indexFinger, pointerColor))
             cv2.circle(imgCurrent, indexFinger, 12, pointerColor, cv2.FILLED)
 
+        # I LOVE YOU
+        if fingersL == [1, 1, 0, 0, 1] or fingersR == [1, 1, 0, 0, 1]:
+            cv2.putText(frame_right, "I LOVE YOU", (200, 200),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
+            cv2.putText(frame_left, "I LOVE YOU", (200, 200),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
+            cv2.putText(imgCurrent, "I LOVE YOU", (200, 200),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
     else:
         annotationStart = False
 
@@ -201,12 +230,12 @@ while True:
             counter = 0
             buttonPressed = False
 
-    # for i, annotation in enumerate(annotations):
-    #     for j in range(len(annotation)):
-    #         if j != 0:
-    #             print(annotation[j - 1][0], annotation[j][0])
-    #             cv2.line(
-    #                 imgCurrent, annotation[j - 1][0], annotation[j][0], annotation[j][1], 12)
+    for i, annotation in enumerate(annotations):
+        for j in range(len(annotation)):
+            if j != 0:
+                print(annotation[j - 1][0], annotation[j][0])
+                cv2.line(
+                    imgCurrent, annotation[j - 1][0], annotation[j][0], annotation[j][1], 12)
 
     imgSmall = cv2.resize(frame_right, (ws, hs))
     h, w, _ = imgCurrent.shape

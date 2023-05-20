@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-# import calibration as calib
 import calibrate_func
 
 
@@ -56,8 +55,8 @@ def CropImage(image, scale):
 # declare all variable
 video_capture_0 = cv2.VideoCapture(1)  # left
 video_capture_1 = cv2.VideoCapture(0)  # right
-bsize = 15
-nDisparities = 16
+bsize = 5
+nDisparities = 32
 scale = 40
 num = 0
 chessboardSize = (6, 6)
@@ -77,10 +76,8 @@ while True:
     video_capture_1.grab()
     ret0, frame0 = video_capture_0.retrieve()
     ret1, frame1 = video_capture_1.retrieve()
-    # frame0 = cv2.flip(frame0, 1)
-    # frame1 = cv2.flip(frame1, 1)
 
-    frame0, frame1 = calibrate_func.undistortRectify(frame0, frame1)
+    # frame0, frame1 = calibrate_func.undistortRectify(frame0, frame1)
 
     # setting camera
     if (ret0):
@@ -89,14 +86,13 @@ while True:
     if (ret1):
         cv2.imshow("Cam 1", frame1)
 
-    # if cv2.waitKey(1) & 0xFF == ord("s"):
-    #     cv2.imwrite('images/stereoRight/imageR' + str(num) + '.png', frame0)
-    #     cv2.imwrite('images/stereoLeft/imageL' + str(num) + '.png', frame1)
-    #     print(num)
-    #     num += 1
+    if cv2.waitKey(1) & 0xFF == ord("s"):
+        cv2.imwrite('images/stereoRight/imageR' + str(num) + '.png', frame0)
+        cv2.imwrite('images/stereoLeft/imageL' + str(num) + '.png', frame1)
+        print(num)
+        num += 1
 
-    result = ShowDisparity(
-        bsize, nDisparities, frame0, frame1)
+    result = ShowDisparity(bsize, nDisparities, frame0, frame1)
     cv2.imshow("Cam 2", result)
 
     if cv2.waitKey(1) & 0xFF == ord("q"):
