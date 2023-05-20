@@ -32,6 +32,7 @@ With all limitations mentioned above, future improvements can be made.
 1. Replace the folder of pictures of presentation slides with a single file such as .pdf or .ppt.
 2. Make the application available online by developing an HTTP application.
 3. Improve the application to support different kinds of resolution, camera, and other parameters. <br/>
+
 Moreover, additional features such as detecting two hands simultaneously, adding empty pages for free drawing, and bluring a background can be implemented.
 
 ## Credits
