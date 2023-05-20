@@ -14,7 +14,7 @@ This project introduces a hand gesture recognition application for controlling a
 
 ## Method
 The application consisted of 2 major modules, hand gesture recognition and 3D vision. <br/> <br/>
-The hand gesture recognition module uses the [cvzone](https://github.com/cvzone/cvzone) library which is a computer vision package that makes processing images and AI functions easier to implement. Also, the package [Mediapipe](https://github.com/google/mediapipe) provides a hand gesture detection module that is able to identify which fingers are raised and which hand it is (left or right). <br/> <br/>
+The hand gesture recognition module uses the [CVZone](https://github.com/cvzone/cvzone) library which is a computer vision package that makes processing images and AI functions easier to implement. Also, the package [Mediapipe](https://github.com/google/mediapipe) provides a hand gesture detection module that is able to identify which fingers are raised and which hand it is (left or right). <br/> <br/>
 For the 3D vision module, we use 2 Logitech C270 webcams to create depth maps using the stereo vision technique. First, we calibrate each camera to retrieve a set of parameters on the captured chessboard images at the same points in time. After that, we combine both cameras with the obtained parameters to estimate the depth of the video frames. The depth images will be used to determine the direction of a finger that points to the screen and blur the background apart from the user's body.
 
 ## Results
