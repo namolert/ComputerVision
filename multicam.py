@@ -1,10 +1,12 @@
 import numpy as np
 import cv2
-import pickle
+# import calibration as calib
+import calibrate_func
 
 
 def ShowDisparity(bSize, nDisparities, imgLeft, imgRight):
     # Initialize the stereo block matching object
+
     stereo = cv2.StereoBM_create(numDisparities=nDisparities, blockSize=bSize)
 
     grayLeft = cv2.cvtColor(imgLeft, cv2.COLOR_BGR2GRAY)
@@ -51,37 +53,82 @@ def CropImage(image, scale):
     return resized_cropped, scale
 
 
+# cv_file = cv2.FileStorage()
+# cv_file.open('stereoMap.xml', cv2.FileStorage_READ)
+# stereoMapL_x = cv_file.getNode('stereoMapL_x').mat()
+# stereoMapL_y = cv_file.getNode('stereoMapL_y').mat()
+# stereoMapR_x = cv_file.getNode('stereoMapR_x').mat()
+# stereoMapR_y = cv_file.getNode('stereoMapR_x').mat()
+
 # declare all variable
-video_capture_0 = cv2.VideoCapture(1)
-video_capture_1 = cv2.VideoCapture(0)
-bsize = 5
+video_capture_0 = cv2.VideoCapture(1)  # left
+video_capture_1 = cv2.VideoCapture(0)  # right
+bsize = 15
 nDisparities = 16
 scale = 40
 num = 0
+chessboardSize = (6, 6)
+frameSize = (640, 480)
+objp = np.zeros((chessboardSize[0] * chessboardSize[1], 3), np.float32)
+objp[:, :2] = np.mgrid[0:chessboardSize[0],
+                       0:chessboardSize[1]].T.reshape(-1, 2)
+size_of_chessboard_squares_mm = 20
+objp = objp * size_of_chessboard_squares_mm
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
 while True:
     ret0, frame0 = video_capture_0.read()
     ret1, frame1 = video_capture_1.read()
-    frame0 = cv2.flip(frame0, 1)
-    frame1 = cv2.flip(frame1, 1)
+
+    video_capture_0.grab()
+    video_capture_1.grab()
+    ret0, frame0 = video_capture_0.retrieve()
+    ret1, frame1 = video_capture_1.retrieve()
+    # frame0 = cv2.flip(frame0, 1)
+    # frame1 = cv2.flip(frame1, 1)
+
+    frame0, frame1 = calibrate_func.undistortRectify(frame0, frame1)
 
     # setting camera
     if (ret0):
         cv2.imshow("Cam 0", frame0)
+        # grayL = cv2.cvtColor(frame0, cv2.COLOR_BGR2GRAY)
+        # retL, cornersL = cv2.findChessboardCorners(grayL, chessboardSize, None)
+        # cornersL = cv2.cornerSubPix(
+        #     grayL, cornersL, (11, 11), (-1, -1), criteria)
+        # cv2.drawChessboardCorners(frame0, chessboardSize, cornersL, retL)
+        # cv2.imshow('imgL', frame0)
+
     if (ret1):
-        frame1_new, scale = CropImage(frame1, scale)
-        cv2.imshow("Cam 1", frame1_new)
+        # frame1_new, scale = CropImage(frame1, scale)
+        # cv2.imshow("Cam 1", frame1_new)
+        cv2.imshow("Cam 1", frame1)
+        # grayR = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+        # retR, cornersR = cv2.findChessboardCorners(grayR, chessboardSize, None)
+        # cornersR = cv2.cornerSubPix(
+        #     grayR, cornersR, (11, 11), (-1, -1), criteria)
+        # cv2.drawChessboardCorners(frame1, chessboardSize, cornersR, retR)
+        # cv2.imshow('imgR', frame1)
 
-    if cv2.waitKey(1) & 0xFF == ord("s"):
-        cv2.imwrite('images/stereoRight/imageR' + str(num) + '.png', frame0)
-        cv2.imwrite('images/stereoLeft/imageL' + str(num) + '.png', frame1_new)
-        print("Images save!!!")
-        num += 1
+    # if cv2.waitKey(1) & 0xFF == ord("s"):
+    #     cv2.imwrite('images/stereoRight/imageR' + str(num) + '.png', frame0)
+    #     cv2.imwrite('images/stereoLeft/imageL' + str(num) + '.png', frame1)
+    #     print(num)
+    #     num += 1
 
-    # find object with depth
-    scale = 37
-    frame1_new, scale = CropImage(frame1, scale)
-    result = ShowDisparity(bsize, nDisparities, frame0, frame1_new)
+    # if num <= 300:
+    #     cv2.imwrite('images/stereoRight/imageR' + str(num) + '.png', frame0)
+    #     cv2.imwrite('images/stereoLeft/imageL' + str(num) + '.png', frame1)
+    #     print(num)
+    #     num += 1
+
+    # # find object with depth
+    # scale = 37
+    # frame1_new, scale = CropImage(frame1, scale)
+    # result = ShowDisparity(bsize, nDisparities, frame0, frame1_new)
+
+    result = ShowDisparity(
+        bsize, nDisparities, frame0, frame1)
     cv2.imshow("Cam 2", result)
 
     if cv2.waitKey(1) & 0xFF == ord("q"):

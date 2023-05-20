@@ -6,7 +6,7 @@ import pickle
 
 ################ FIND CHESSBOARD CORNERS - OBJECT POINTS AND IMAGE POINTS #############################
 
-chessboardSize = (7, 7)
+chessboardSize = (5, 5)
 frameSize = (640, 480)
 
 
@@ -45,6 +45,8 @@ for imgLeft, imgRight in zip(imagesLeft, imagesRight):
     # If found, add object points, image points (after refining them)
     if retL and retR == True:
 
+        print(imgLeft)
+
         objpoints.append(objp)
         cornersL = cv.cornerSubPix(
             grayL, cornersL, (11, 11), (-1, -1), criteria)
@@ -82,7 +84,7 @@ flags = 0
 flags != cv.CALIB_FIX_INTRINSIC
 criteria_stereo = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 retStereo, newCameraMatrixL, distL, newCameraMatrixR, distR, rot, trans, essentialMatrix, fundamentalMatrix = cv.stereoCalibrate(
-    objpoints, imgpointsL, imgpointsR, newCameraMatrixL, distL, newCameraMatrixR, distR)
+    objpoints, imgpointsL, imgpointsR, newCameraMatrixL, distL, newCameraMatrixR, distR, imageSize=frameSize)
 
 rectifyScale = 1
 rectL, rectR, projMatrixL, projMatrixR, Q, roi_L, roi_R = cv.stereoRectify(
@@ -104,18 +106,25 @@ cv_file.write('stereoMapR_y', stereoMapR[1])
 cv_file.release()
 
 
-# Save the camera calibration result for later use (we won't worry about rvecs / tvecs)
-# pickle.dump((cameraMatrixL, distL), open("calibration.pkl", "wb"))
-# pickle.dump(cameraMatrixL, open("cameraMatrix.pkl", "wb"))
-# pickle.dump(distL, open("dist.pkl", "wb"))
+# # Save the camera calibration result for later use(we won't worry about rvecs / tvecs)
+# retL, cameraMatrixL, distL, rvecsL, tvecsL = cv.calibrateCamera(
+#     objpoints, imgpointsL, frameSize, None, None)
+# retR, cameraMatrixR, distR, rvecsR, tvecsR = cv.calibrateCamera(
+#     objpoints, imgpointsR, frameSize, None, None)
+# pickle.dump((cameraMatrixL, distL), open("calibrationL.pkl", "wb"))
+# pickle.dump(cameraMatrixL, open("cameraMatrixL.pkl", "wb"))
+# pickle.dump(distL, open("distL.pkl", "wb"))
+# pickle.dump((cameraMatrixR, distR), open("calibrationR.pkl", "wb"))
+# pickle.dump(cameraMatrixR, open("cameraMatrixR.pkl", "wb"))
+# pickle.dump(distR, open("distR.pkl", "wb"))
 
 
 # ############## UNDISTORTION #####################################################
 
-# # img = cv.imread('cali5.png')
-# # h,  w = img.shape[:2]
-# # newCameraMatrix, roi = cv.getOptimalNewCameraMatrix(
-# #     cameraMatrix, dist, (w, h), 1, (w, h))
+# img = cv.imread('cali5.png')
+# h,  w = img.shape[:2]
+# newCameraMatrix, roi = cv.getOptimalNewCameraMatrix(
+#     cameraMatrix, dist, (w, h), 1, (w, h))
 
 
 # # Undistort
