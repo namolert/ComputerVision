@@ -2,7 +2,7 @@
 This is an application where you can use hand gestures with the slides. Also, the application is able to blur a background when users needed. <br/> <br/>
 This is a final project in 2110433 Computer Vision (2022/2), Faculty of Engineering, Chulalongkorn University.
 ## Problem statement
-A satisfying presentation requires the composition of proper content, equipment, and speech. However, some users cannot have a good presentation due to the lack of equipment. Therefore, the objective of this project is to create an application that requires only 2 cameras as top-up equipment to let the presenter conduct a decent presentation. This application uses real-time 3D depth estimation using the two cameras to let the presenter control the presentation slides naturally by performing hand gestures without using additional controllers. The presenter can also blur their backgrounds by doing a specified hand gesture.
+A satisfying presentation requires the composition of proper content, equipment, and speech. However, some users cannot have a good presentation due to the lack of equipment. Therefore, the objective of this project is to create an application that requires only 2 cameras as top-up equipment to let the presenter conduct a decent presentation. This application uses real-time 3D depth estimation using the two cameras to let the presenter control the presentation slides naturally by performing hand gestures without using additional controllers.
 
 ## Technical challenge
 
@@ -15,9 +15,11 @@ This project introduces a hand gesture recognition application for controlling a
 ## Method
 The application consisted of 2 major modules, hand gesture recognition and 3D vision. <br/> <br/>
 The hand gesture recognition module uses the [CVZone](https://github.com/cvzone/cvzone) library which is a computer vision package that makes processing images and AI functions easier to implement. Also, the package [Mediapipe](https://github.com/google/mediapipe) provides a hand gesture detection module that is able to identify which fingers are raised and which hand it is (left or right). <br/> <br/>
-For the 3D vision module, we use 2 Logitech C270 webcams to create depth maps using the stereo vision technique. First, we calibrate each camera to retrieve a set of parameters on the captured chessboard images at the same points in time. After that, we combine both cameras with the obtained parameters to estimate the depth of the video frames. The depth images will be used to determine the direction of a finger that points to the screen and blur the background apart from the user's body.
+For the 3D vision module, we use 2 Logitech C270 webcams to create depth maps using the stereo vision technique. First, we calibrate each camera to retrieve a set of parameters on the captured chessboard images at the same points in time. After that, we combine both cameras with the obtained parameters to estimate the depth of the video frames. The depth images will be used to determine the direction of a finger that points to the screen.
 
 ## Results
+In hand gesture recognition, the CVZone and Mediapipe able to detect and identify any shape of the hand accurately. <br/> <br/>
+In 3D vision, the camera able to detect the depth between a index finger tip and MCP accurately. The location from that direction also easy to understand and precise.
 
 ## Discussion
 The application seems to work very well. However, there are some limitations to our application.
@@ -30,7 +32,7 @@ With all limitations mentioned above, future improvements can be made.
 1. Replace the folder of pictures of presentation slides with a single file such as .pdf or .ppt.
 2. Make the application available online by developing an HTTP application.
 3. Improve the application to support different kinds of resolution, camera, and other parameters. <br/>
-Moreover, additional features such as detecting two hands simultaneously or adding empty pages for free drawing can be implemented.
+Moreover, additional features such as detecting two hands simultaneously, adding empty pages for free drawing, and bluring a background can be implemented.
 
 ## Credits
 Big thanks to the creators.
