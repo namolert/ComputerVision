@@ -33,7 +33,7 @@ With all limitations mentioned above, future improvements can be made.
 2. Make the application available online by developing an HTTP application.
 3. Improve the application to support different kinds of resolution, camera, and other parameters. <br/>
 
-Moreover, additional features such as detecting two hands simultaneously, adding empty pages for free drawing, and bluring a background can be implemented.
+Moreover, additional features such as detecting two hands simultaneously, adding empty pages for free drawing, and blurring a background can be implemented.
 
 ## Credits
 Big thanks to the creators.
