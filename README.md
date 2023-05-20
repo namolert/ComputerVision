@@ -18,8 +18,8 @@ The hand gesture recognition module uses the [CVZone](https://github.com/cvzone/
 For the 3D vision module, we use 2 Logitech C270 webcams to create depth maps using the stereo vision technique. First, we calibrate each camera to retrieve a set of parameters on the captured chessboard images at the same points in time. After that, we combine both cameras with the obtained parameters to estimate the depth of the video frames. The depth images will be used to determine the direction of a finger that points to the screen.
 
 ## Results
-In hand gesture recognition, the CVZone and Mediapipe able to detect and identify any shape of the hand accurately. <br/> <br/>
-In 3D vision, the camera able to detect the depth between a index finger tip and MCP accurately. The location from that direction also easy to understand and precise.
+In hand gesture recognition, the CVZone and Mediapipe are able to detect and identify any shape of the hand accurately. <br/> <br/>
+In 3D vision, the camera is able to detect the depth between an index finger tip and MCP accurately. The location from that direction is also easy to understand and precise.
 
 ## Discussion
 The application seems to work very well. However, there are some limitations to our application.
