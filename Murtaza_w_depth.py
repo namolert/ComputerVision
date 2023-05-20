@@ -201,12 +201,12 @@ while True:
             counter = 0
             buttonPressed = False
 
-    for i, annotation in enumerate(annotations):
-        for j in range(len(annotation)):
-            if j != 0:
-                print(annotation[j - 1][0], annotation[j][0])
-                cv2.line(
-                    imgCurrent, annotation[j - 1][0], annotation[j][0], annotation[j][1], 12)
+    # for i, annotation in enumerate(annotations):
+    #     for j in range(len(annotation)):
+    #         if j != 0:
+    #             print(annotation[j - 1][0], annotation[j][0])
+    #             cv2.line(
+    #                 imgCurrent, annotation[j - 1][0], annotation[j][0], annotation[j][1], 12)
 
     imgSmall = cv2.resize(frame_right, (ws, hs))
     h, w, _ = imgCurrent.shape
