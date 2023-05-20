@@ -35,12 +35,8 @@ with mp_facedetector.FaceDetection(min_detection_confidence=0.7) as face_detecti
         succes_right, frame_right = cap_right.read()
         succes_left, frame_left = cap_left.read()
 
-    ################## CALIBRATION #########################################################
-
         frame_right, frame_left = calibrate_func.undistortRectify(
             frame_right, frame_left)
-
-    ########################################################################################
 
         # If cannot catch any frame, break
         if not succes_right or not succes_left:
@@ -61,9 +57,6 @@ with mp_facedetector.FaceDetection(min_detection_confidence=0.7) as face_detecti
             # Convert the RGB image to BGR
             frame_right = cv2.cvtColor(frame_right, cv2.COLOR_RGB2BGR)
             frame_left = cv2.cvtColor(frame_left, cv2.COLOR_RGB2BGR)
-
-            ################## CALCULATING DEPTH #########################################################
-
             center_right = 0
             center_left = 0
 

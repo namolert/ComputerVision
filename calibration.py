@@ -3,16 +3,11 @@ import cv2 as cv
 import glob
 import pickle
 
-
-################ FIND CHESSBOARD CORNERS - OBJECT POINTS AND IMAGE POINTS #############################
-
 chessboardSize = (5, 5)
 frameSize = (640, 480)
 
-
 # termination criteria
 criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-
 
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 objp = np.zeros((chessboardSize[0] * chessboardSize[1], 3), np.float32)
@@ -22,11 +17,10 @@ objp[:, :2] = np.mgrid[0:chessboardSize[0],
 size_of_chessboard_squares_mm = 20
 objp = objp * size_of_chessboard_squares_mm
 
-
 # Arrays to store object points and image points from all the images.
 objpoints = []  # 3d point in real world space
-imgpointsL = []  # 2d points in image plane.
-imgpointsR = []
+imgpointsL = []  # 2d points in image plane for left frame.
+imgpointsR = []  # 2d points in image plane for right frame.
 
 imagesLeft = glob.glob('images/stereoLeft/*.png')
 imagesRight = glob.glob('images/stereoRight/*.png')
@@ -65,9 +59,7 @@ for imgLeft, imgRight in zip(imagesLeft, imagesRight):
 
 cv.destroyAllWindows()
 
-
-############## CALIBRATION #######################################################
-
+# Calibration
 retL, cameraMatrixL, distL, rvecsL, tvecsL = cv.calibrateCamera(
     objpoints, imgpointsL, frameSize, None, None)
 heightL, widthL, channelsL = imgL.shape
@@ -104,56 +96,3 @@ cv_file.write('stereoMapR_x', stereoMapR[0])
 cv_file.write('stereoMapR_y', stereoMapR[1])
 
 cv_file.release()
-
-
-# # Save the camera calibration result for later use(we won't worry about rvecs / tvecs)
-# retL, cameraMatrixL, distL, rvecsL, tvecsL = cv.calibrateCamera(
-#     objpoints, imgpointsL, frameSize, None, None)
-# retR, cameraMatrixR, distR, rvecsR, tvecsR = cv.calibrateCamera(
-#     objpoints, imgpointsR, frameSize, None, None)
-# pickle.dump((cameraMatrixL, distL), open("calibrationL.pkl", "wb"))
-# pickle.dump(cameraMatrixL, open("cameraMatrixL.pkl", "wb"))
-# pickle.dump(distL, open("distL.pkl", "wb"))
-# pickle.dump((cameraMatrixR, distR), open("calibrationR.pkl", "wb"))
-# pickle.dump(cameraMatrixR, open("cameraMatrixR.pkl", "wb"))
-# pickle.dump(distR, open("distR.pkl", "wb"))
-
-
-# ############## UNDISTORTION #####################################################
-
-# img = cv.imread('cali5.png')
-# h,  w = img.shape[:2]
-# newCameraMatrix, roi = cv.getOptimalNewCameraMatrix(
-#     cameraMatrix, dist, (w, h), 1, (w, h))
-
-
-# # Undistort
-# dst = cv.undistort(img, cameraMatrix, dist, None, newCameraMatrix)
-
-# # crop the image
-# x, y, w, h = roi
-# dst = dst[y:y+h, x:x+w]
-# cv.imwrite('caliResult1.png', dst)
-
-
-# # Undistort with Remapping
-# mapx, mapy = cv.initUndistortRectifyMap(
-#     cameraMatrix, dist, None, newCameraMatrix, (w, h), 5)
-# dst = cv.remap(img, mapx, mapy, cv.INTER_LINEAR)
-
-# # crop the image
-# x, y, w, h = roi
-# dst = dst[y:y+h, x:x+w]
-# cv.imwrite('caliResult2.png', dst)
-
-
-# # Reprojection Error
-# mean_error = 0
-
-# for i in range(len(objpoints)):
-#     imgpoints2, _ = cv.projectPoints(
-#         objpoints[i], rvecs[i], tvecs[i], cameraMatrix, dist)
-#     error = cv.norm(imgpoints[i], imgpoints2, cv.NORM_L2)/len(imgpoints2)
-#     mean_error += error
-
-# print("total error: {}".format(mean_error/len(objpoints)))
