@@ -21,7 +21,8 @@ cap_left.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap_left.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
 # Hand Detector
-detectorHand = HandDetector(detectionCon=0.8, maxHands=1)
+detectorHandL = HandDetector(detectionCon=0.8, maxHands=1)
+detectorHandR = HandDetector(detectionCon=0.8, maxHands=1)
 fingerIndex = mp.solutions.hands.HandLandmark
 
 # Variables
@@ -64,8 +65,8 @@ while True:
     imgCurrent = cv2.imread(pathFullImage)
 
     # Find the hand and its landmarks
-    handsR, frame_right = detectorHand.findHands(frame_right)
-    handsL, frame_left = detectorHand.findHands(frame_left)
+    handsR, frame_right = detectorHandR.findHands(frame_right)
+    handsL, frame_left = detectorHandL.findHands(frame_left)
 
     # Draw Gesture Threshold line
     cv2.line(frame_right, (0, gestureThreshold),
@@ -92,8 +93,8 @@ while True:
         lmListL = handL["lmList"]
 
         # List of which fingers are up
-        fingersR = detectorHand.fingersUp(handR)
-        fingersL = detectorHand.fingersUp(handL)
+        fingersR = detectorHandR.fingersUp(handR)
+        fingersL = detectorHandL.fingersUp(handL)
 
         # Constrain values for easier drawing
         indexTipXR = int(np.interp(lmListR[fingerIndex.INDEX_FINGER_TIP][0], [
