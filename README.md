@@ -24,13 +24,12 @@ For the 3D vision module, we use 2 Logitech C270 webcams to create depth maps us
 In hand gesture recognition, the CVZone and Mediapipe are able to detect and identify any shape of the hand accurately. <br/> <br/>
 In 3D vision, the camera is able to detect the depth between an index finger tip and MCP accurately. The location from that direction is also easy to understand and precise.
 
-## Discussion
+## Discussion & Future improvements
 The application seems to work very well. However, there are some limitations to our application.
 1. Slides are stored as a folder of pictures. This means that if the presentation has 100 slides we need to save them into 100 picture files.
 2. The application is only available offline, which makes online presentation unavailable.
 3. The result may vary when used with other camera models and other resolutions.
 
-## Future improvements
 With all limitations mentioned above, future improvements can be made.
 1. Replace the folder of pictures of presentation slides with a single file such as .pdf or .ppt.
 2. Make the application available online by developing an HTTP application.
