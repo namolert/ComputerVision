@@ -106,6 +106,12 @@ while True:
         cv2.putText(frame_left, "mode: annotating", (50, 400),
                     cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 3)
 
+    # Draw Gesture Threshold line
+    cv2.line(frame_right, (0, gestureThreshold),
+             (width, gestureThreshold), (0, 255, 0), 5)
+    cv2.line(frame_left, (0, gestureThreshold),
+             (width, gestureThreshold), (0, 255, 0), 5)
+
     # If hand is detected
     if (handsR and handsL) and not buttonPressed:
 
@@ -189,10 +195,10 @@ while True:
         # Map index finger to the screen
         depth = tri.find_depth(
             indexFingerMcpR, indexFingerMcpL, frame_right, frame_left, B, f, alpha)
-        cv2.putText(frame_right, "Distance: " + str(round(depth, 1)),
-                    (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 3)
-        cv2.putText(frame_left, "Distance: " + str(round(depth, 1)),
-                    (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 3)
+        # cv2.putText(frame_right, "Distance: " + str(round(depth, 1)),
+        #             (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 3)
+        # cv2.putText(frame_left, "Distance: " + str(round(depth, 1)),
+        #             (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 3)
         indexFinger = getImageXYFromZ(
             (indexTipXL, indexTipYL, indexTipZL), (indexMcpXL, indexMcpYL, indexMcpZL), depth)
 
@@ -233,7 +239,6 @@ while True:
     for i, annotation in enumerate(annotations):
         for j in range(len(annotation)):
             if j != 0:
-                print(annotation[j - 1][0], annotation[j][0])
                 cv2.line(
                     imgCurrent, annotation[j - 1][0], annotation[j][0], annotation[j][1], 12)
 
