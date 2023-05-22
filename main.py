@@ -3,14 +3,14 @@ import cv2
 import os
 import numpy as np
 import mediapipe as mp
-import calibrate_func
+import undistorted
 import triangulation as tri
 
 # Parameters
 width, height = 640, 480
 # width, height = 1280, 720
 gestureThreshold = 300
-folderPath = os.path.join('images', 'presentation2')
+folderPath = os.path.join('images', 'presentation')
 
 # Camera Setup
 cap_right = cv2.VideoCapture(0, cv2.CAP_DSHOW)
@@ -34,10 +34,6 @@ drawMode = False
 imgNumber = 0
 delayCounter = 0
 pointMode = True
-
-# annotationsR, annotationsL = [[]], [[]]
-# annotationNumberR, annotationNumberL = -1, -1
-# annotationStartR, annotationStartL = False, False
 
 annotations = [[]]
 annotationNumber = -1
@@ -173,6 +169,9 @@ while True:
             np.array([[[abs(indexTipZR), 255, 255]]]).astype(np.uint8), cv2.COLOR_HSV2BGR)
         pointerColor = pointerColor.reshape(3)
         pointerColor = tuple([int(x) for x in pointerColor])
+
+        print("L: ", fingersL)
+        print("R: ", fingersR)
 
         # Change Page
         if fingersL == [1, 0, 0, 0, 0] or fingersR == [1, 0, 0, 0, 0]:
