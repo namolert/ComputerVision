@@ -1,4 +1,3 @@
-# project-compvision
 This is an application where you can use hand gestures with the slides. Also, the application is able to blur a background when users needed. <br/> <br/>
 This is a final project in 2110433 Computer Vision (2022/2), Faculty of Engineering, Chulalongkorn University.
 ## Problem statement
